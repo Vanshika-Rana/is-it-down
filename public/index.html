@@ -7,25 +7,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #fafaf9;
+        --bg-start: #f8f7ff;
+        --bg-end: #fff8f0;
         --surface: #ffffff;
-        --surface-soft: #f5f5f4;
-        --text: #111827;
+        --surface-soft: #fafafa;
+        --text: #111111;
         --muted: #6b7280;
-        --border: #e7e5e4;
-        --border-strong: #d6d3d1;
+        --border: #e9e9ee;
         --green: #16a34a;
-        --green-soft: #ecfdf3;
+        --green-soft: #dcfce7;
         --red: #dc2626;
-        --red-soft: #fef2f2;
-        --blue: #2563eb;
-        --shadow-soft: 0 4px 10px rgba(17, 24, 39, 0.04);
-        --shadow-card: 0 8px 24px rgba(17, 24, 39, 0.06);
+        --red-soft: #fee2e2;
+        --blue-pill-bg: #eaf2ff;
+        --blue-pill-text: #2563eb;
+        --gray-pill-bg: #f1f5f9;
+        --gray-pill-text: #475569;
+        --shadow-soft: 0 1px 2px rgba(17, 24, 39, 0.03), 0 10px 20px rgba(17, 24, 39, 0.04);
         --radius-lg: 16px;
         --radius-md: 12px;
       }
@@ -36,31 +38,47 @@
 
       body {
         margin: 0;
-        background: var(--bg);
-        color: var(--text);
         font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+        min-height: 100vh;
       }
 
       .container {
-        max-width: 1040px;
+        max-width: 1060px;
         margin: 0 auto;
-        padding: 48px 20px 24px;
+        padding: 52px 20px 26px;
       }
 
       .hero {
         display: flex;
-        align-items: flex-end;
         justify-content: space-between;
+        align-items: end;
         gap: 16px;
-        margin-bottom: 28px;
+        margin-bottom: 24px;
+      }
+
+      .title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .live-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: liveBlink 1.5s infinite;
       }
 
       h1 {
         margin: 0;
-        font-size: clamp(30px, 5vw, 42px);
-        line-height: 1.05;
-        letter-spacing: -0.03em;
-        font-weight: 800;
+        font-size: clamp(34px, 6vw, 48px);
+        line-height: 1;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: #0b0b0f;
       }
 
       .subtitle {
@@ -71,17 +89,17 @@
 
       .last-updated {
         border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.75);
         border-radius: 999px;
-        background: var(--surface);
         padding: 8px 12px;
-        color: var(--muted);
         font-size: 12px;
         font-weight: 600;
+        color: var(--muted);
         white-space: nowrap;
       }
 
       .panel {
-        background: var(--surface);
+        background: rgba(255, 255, 255, 0.8);
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
         padding: 16px;
@@ -97,7 +115,7 @@
       input,
       button {
         height: 44px;
-        border-radius: 10px;
+        border-radius: 11px;
         font-size: 14px;
       }
 
@@ -113,33 +131,34 @@
       }
 
       input:focus-visible {
-        outline: 2px solid rgba(37, 99, 235, 0.25);
-        outline-offset: 1px;
-        border-color: #93c5fd;
+        outline: none;
+        border-color: #a5b4fc;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
       }
 
       .primary-btn {
         border: 0;
-        background: #111827;
+        background: #0f172a;
         color: #fff;
-        font-weight: 700;
+        font-weight: 800;
         letter-spacing: 0.01em;
-        padding: 0 16px;
+        padding: 0 17px;
         cursor: pointer;
-        transition: transform 0.08s ease, background 0.15s ease, box-shadow 0.15s ease;
-        box-shadow: 0 3px 8px rgba(17, 24, 39, 0.18);
+        transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease;
+        box-shadow: 0 8px 14px rgba(15, 23, 42, 0.2);
       }
 
       .primary-btn:hover {
-        background: #0b1220;
+        transform: scale(1.02);
+        background: #020617;
       }
 
       .primary-btn:active {
-        transform: translateY(1px);
+        transform: scale(1);
       }
 
       .status {
-        min-height: 22px;
+        min-height: 20px;
         margin-top: 10px;
         color: var(--muted);
         font-size: 13px;
@@ -149,30 +168,33 @@
       .stats {
         margin-top: 16px;
         display: grid;
-        gap: 12px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
       }
 
       .stat {
+        background: rgba(255, 255, 255, 0.78);
         border: 1px solid var(--border);
         border-radius: var(--radius-md);
-        background: var(--surface);
+        box-shadow: var(--shadow-soft);
         padding: 16px;
       }
 
       .stat-label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
         color: var(--muted);
         font-size: 12px;
         font-weight: 600;
-        letter-spacing: 0.01em;
       }
 
       .stat-value {
-        margin-top: 6px;
-        font-size: clamp(24px, 4vw, 30px);
+        margin-top: 7px;
+        font-size: clamp(28px, 4vw, 34px);
         line-height: 1;
-        font-weight: 800;
-        letter-spacing: -0.02em;
+        font-weight: 900;
+        letter-spacing: -0.03em;
       }
 
       .grid {
@@ -182,15 +204,18 @@
       }
 
       .card {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: cardIn 0.45s ease forwards;
         border: 1px solid var(--border);
-        border-left: 6px solid var(--border-strong);
+        border-left: 4px solid #cbd5e1;
         border-radius: var(--radius-lg);
-        background: var(--surface);
-        box-shadow: var(--shadow-card);
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: var(--shadow-soft);
         padding: 18px;
         display: grid;
         grid-template-columns: 1fr auto;
-        gap: 18px;
+        gap: 14px;
         align-items: start;
       }
 
@@ -207,11 +232,12 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        flex-wrap: wrap;
       }
 
       .name {
         font-size: 19px;
-        font-weight: 700;
+        font-weight: 800;
         letter-spacing: -0.01em;
       }
 
@@ -230,13 +256,30 @@
       }
 
       .metric-pill {
-        border: 1px solid var(--border);
         border-radius: 999px;
-        background: var(--surface-soft);
         font-size: 12px;
-        color: #374151;
         padding: 5px 10px;
         font-weight: 600;
+        border: 1px solid transparent;
+      }
+
+      .metric-pill.http {
+        background: var(--gray-pill-bg);
+        color: var(--gray-pill-text);
+        border-color: #e2e8f0;
+      }
+
+      .metric-pill.response {
+        background: var(--blue-pill-bg);
+        color: var(--blue-pill-text);
+        border-color: #dbeafe;
+      }
+
+      .checked {
+        margin-top: 9px;
+        color: #9ca3af;
+        font-size: 12px;
+        font-style: italic;
       }
 
       .right {
@@ -253,7 +296,7 @@
         border-radius: 999px;
         padding: 6px 11px;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 800;
         letter-spacing: 0.02em;
       }
 
@@ -265,7 +308,7 @@
 
       .badge.up {
         background: var(--green-soft);
-        color: #166534;
+        color: var(--green);
       }
 
       .badge.up .badge-dot {
@@ -276,7 +319,7 @@
       .badge.down,
       .badge.unknown {
         background: var(--red-soft);
-        color: #991b1b;
+        color: var(--red);
       }
 
       .badge.down .badge-dot,
@@ -291,35 +334,40 @@
       }
 
       .uptime-value {
-        font-size: clamp(28px, 4vw, 34px);
+        font-size: 2rem;
         line-height: 1;
+        font-weight: 900;
+        color: #111827;
         letter-spacing: -0.02em;
-        font-weight: 800;
       }
 
       .danger {
-        margin-top: 2px;
-        border: 1px solid #fecaca;
-        border-radius: 9px;
-        background: #fff;
-        color: #b91c1c;
-        font-size: 12px;
-        font-weight: 700;
-        padding: 8px 12px;
+        width: 22px;
+        height: 22px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: #9ca3af;
+        font-size: 15px;
+        line-height: 1;
         cursor: pointer;
+        opacity: 0.65;
+        transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
       }
 
       .danger:hover {
-        background: #fef2f2;
+        opacity: 1;
+        color: #4b5563;
+        background: #f3f4f6;
       }
 
       .empty {
-        border: 1px dashed var(--border-strong);
+        border: 1px dashed #d6d3d1;
         border-radius: var(--radius-lg);
-        background: var(--surface);
+        background: rgba(255, 255, 255, 0.8);
         text-align: center;
         color: var(--muted);
-        padding: 38px 20px;
+        padding: 36px 20px;
         font-size: 14px;
       }
 
@@ -327,21 +375,20 @@
         color: #1f2937;
       }
 
-      .foot-wrap {
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        color: var(--muted);
+      footer {
+        margin-top: 24px;
+        text-align: center;
+        color: #9ca3af;
         font-size: 12px;
       }
 
-      .zerops {
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        padding: 7px 11px;
-        background: #fff;
+      footer a {
+        color: #6b7280;
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
       }
 
       @keyframes pulse {
@@ -349,19 +396,37 @@
           box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.35);
         }
         70% {
-          box-shadow: 0 0 0 8px rgba(22, 163, 74, 0);
+          box-shadow: 0 0 0 7px rgba(22, 163, 74, 0);
         }
         100% {
           box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
         }
       }
 
+      @keyframes liveBlink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+
+      @keyframes cardIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       @media (max-width: 860px) {
         .container {
-          padding-top: 30px;
+          padding-top: 36px;
         }
 
         .hero {
+          flex-direction: column;
           align-items: flex-start;
         }
 
@@ -380,11 +445,6 @@
         .right {
           align-items: flex-start;
         }
-
-        .foot-wrap {
-          flex-direction: column;
-          align-items: flex-start;
-        }
       }
     </style>
   </head>
@@ -392,7 +452,10 @@
     <main class="container">
       <header class="hero">
         <div>
-          <h1>Is It Down?</h1>
+          <div class="title-wrap">
+            <span class="live-dot" aria-hidden="true"></span>
+            <h1>Is It Down?</h1>
+          </div>
           <p class="subtitle">Real-time uptime monitoring for production services</p>
         </div>
         <div class="last-updated" id="last-updated">Refreshing...</div>
@@ -409,24 +472,24 @@
 
       <section class="stats" id="stats">
         <article class="stat">
-          <div class="stat-label">Total Monitors</div>
+          <div class="stat-label"><span aria-hidden="true">👁</span> Total Monitors</div>
           <div class="stat-value" id="stat-total">0</div>
         </article>
         <article class="stat">
-          <div class="stat-label">Currently Up</div>
+          <div class="stat-label"><span aria-hidden="true">✅</span> Currently Up</div>
           <div class="stat-value" id="stat-up">0</div>
         </article>
         <article class="stat">
-          <div class="stat-label">Avg Uptime (24h)</div>
+          <div class="stat-label"><span aria-hidden="true">📈</span> Avg Uptime</div>
           <div class="stat-value" id="stat-uptime">N/A</div>
         </article>
       </section>
 
       <section class="grid" id="monitor-list"></section>
 
-      <footer class="foot-wrap">
-        <span>Auto-refresh every 10 seconds</span>
-        <span class="zerops">Powered by Zerops</span>
+      <footer>
+        Powered by
+        <a href="https://zerops.io" target="_blank" rel="noopener noreferrer">Zerops</a>
       </footer>
     </main>
 
@@ -489,22 +552,59 @@
         return `${days} day${days === 1 ? "" : "s"} ago`;
       }
 
+      function animateValue(element, targetText) {
+        const percentMatch = String(targetText).match(/^(\d+(?:\.\d+)?)%$/);
+        const intMatch = String(targetText).match(/^(\d+)$/);
+
+        if (!percentMatch && !intMatch) {
+          element.textContent = targetText;
+          return;
+        }
+
+        const isPercent = Boolean(percentMatch);
+        const target = isPercent ? Number(percentMatch[1]) : Number(intMatch[1]);
+        const duration = 550;
+        const start = performance.now();
+
+        function tick(now) {
+          const progress = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = target * eased;
+
+          if (isPercent) {
+            element.textContent = `${current.toFixed(2)}%`;
+          } else {
+            element.textContent = `${Math.round(current)}`;
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            element.textContent = targetText;
+          }
+        }
+
+        requestAnimationFrame(tick);
+      }
+
       function updateStats(monitors) {
-        statTotal.textContent = String(monitors.length);
+        const totalText = String(monitors.length);
         const currentlyUp = monitors.filter((m) => m.latestStatus?.status === "up").length;
-        statUp.textContent = String(currentlyUp);
+        const upText = String(currentlyUp);
 
         const withUptime = monitors
           .map((m) => m.uptime24hPct)
           .filter((v) => Number.isFinite(v));
 
-        if (withUptime.length === 0) {
-          statUptime.textContent = "N/A";
-          return;
+        let uptimeText = "N/A";
+        if (withUptime.length > 0) {
+          const avg = withUptime.reduce((sum, value) => sum + value, 0) / withUptime.length;
+          uptimeText = `${avg.toFixed(2)}%`;
         }
 
-        const avg = withUptime.reduce((sum, value) => sum + value, 0) / withUptime.length;
-        statUptime.textContent = `${avg.toFixed(2)}%`;
+        animateValue(statTotal, totalText);
+        animateValue(statUp, upText);
+        animateValue(statUptime, uptimeText);
       }
 
       function renderMonitors(monitors) {
@@ -517,7 +617,7 @@
         }
 
         monitorList.innerHTML = monitors
-          .map((monitor) => {
+          .map((monitor, index) => {
             const latest = monitor.latestStatus || {};
             const isUp = latest.status === "up";
             const hasStatus = Boolean(latest.status);
@@ -527,7 +627,7 @@
             const code = latest.statusCode ?? "-";
 
             return `
-              <article class="card ${statusClass}">
+              <article class="card ${statusClass}" style="animation-delay: ${index * 100}ms;">
                 <div>
                   <div class="name-line">
                     <div class="badge ${statusClass}">
@@ -538,15 +638,15 @@
                   </div>
                   <div class="url">${escapeHtml(monitor.url)}</div>
                   <div class="metrics">
-                    <span class="metric-pill">HTTP ${code}</span>
-                    <span class="metric-pill">${response} ms</span>
-                    <span class="metric-pill">Checked ${formatCheckedAt(latest.checkedAt)}</span>
+                    <span class="metric-pill http">HTTP ${code}</span>
+                    <span class="metric-pill response">${response} ms</span>
                   </div>
+                  <div class="checked">Checked ${formatCheckedAt(latest.checkedAt)}</div>
                 </div>
                 <div class="right">
                   <div class="uptime-label">24h Uptime</div>
                   <div class="uptime-value">${formatUptime(monitor.uptime24hPct)}</div>
-                  <button class="danger" onclick="removeMonitor(${monitor.id})">Delete</button>
+                  <button class="danger" aria-label="Delete monitor" onclick="removeMonitor(${monitor.id})">✕</button>
                 </div>
               </article>
             `;
