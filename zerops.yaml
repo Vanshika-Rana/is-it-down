@@ -9,6 +9,7 @@ zerops:
         - public
         - package.json
         - package-lock.json
+        - node_modules
       cache: node_modules
     run:
       base: nodejs@20
@@ -20,7 +21,7 @@ zerops:
         DB_PORT: "5432"
         DB_USER: ${db_user}
         DB_PASSWORD: ${db_password}
-        DB_NAME: ${db_hostname}
+        DB_NAME: db
         CACHE_HOST: cache
         CACHE_PORT: "6379"
       start: node src/index.js
