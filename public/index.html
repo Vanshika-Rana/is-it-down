@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Is It Down?</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-1: #080b14;
+        --bg-2: #0e1526;
+        --panel: rgba(18, 25, 44, 0.7);
+        --panel-strong: rgba(14, 20, 36, 0.9);
+        --border: rgba(134, 154, 194, 0.2);
+        --muted: #98a5c2;
+        --text: #edf2ff;
+        --text-soft: #c9d3ea;
+        --green: #27d07d;
+        --red: #ff5d70;
+        --amber: #ffb457;
+        --blue: #6b8cff;
+        --cyan: #53d4ff;
+        --shadow: 0 12px 40px rgba(4, 8, 18, 0.45);
+        --radius-lg: 18px;
+        --radius-md: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+        background:
+          radial-gradient(1200px 600px at 0% -10%, rgba(83, 212, 255, 0.15), transparent 60%),
+          radial-gradient(900px 500px at 95% -10%, rgba(107, 140, 255, 0.22), transparent 55%),
+          linear-gradient(145deg, var(--bg-1), var(--bg-2));
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 36px 18px 56px;
+      }
+
+      .hero {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: end;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(30px, 5vw, 42px);
+        letter-spacing: -0.03em;
+      }
+
+      .subtitle {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .chip {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 8px 12px;
+        color: var(--text-soft);
+        background: rgba(107, 140, 255, 0.12);
+        backdrop-filter: blur(8px);
+        font-size: 13px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 18px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(12px);
+      }
+
+      form {
+        display: grid;
+        grid-template-columns: minmax(130px, 1fr) minmax(240px, 2fr) auto;
+        gap: 12px;
+      }
+
+      input,
+      button {
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(10, 14, 25, 0.65);
+        color: var(--text);
+        padding: 11px 12px;
+        font-size: 14px;
+      }
+
+      input::placeholder {
+        color: #8896b8;
+      }
+
+      input:focus-visible,
+      button:focus-visible {
+        outline: 2px solid rgba(83, 212, 255, 0.45);
+        outline-offset: 1px;
+      }
+
+      button {
+        background: linear-gradient(135deg, #6284ff, #4ebef9);
+        border-color: transparent;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: transform 0.12s ease, filter 0.12s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.06);
+      }
+
+      button.danger {
+        background: rgba(255, 93, 112, 0.08);
+        border-color: var(--border);
+        color: #ffb4bf;
+        padding: 8px 10px;
+        font-weight: 600;
+      }
+
+      .status {
+        margin-top: 12px;
+        min-height: 24px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .status::before {
+        content: "";
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--blue);
+        opacity: 0.8;
+      }
+
+      .stats {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .stat {
+        padding: 14px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        background: var(--panel-strong);
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .stat-value {
+        margin-top: 6px;
+        font-size: 23px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .card {
+        display: grid;
+        grid-template-columns: 1fr minmax(170px, auto);
+        gap: 14px;
+        align-items: start;
+        background: var(--panel-strong);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .name-wrap {
+        min-width: 0;
+      }
+
+      .name-line {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        min-width: 0;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04);
+      }
+
+      .up {
+        background: var(--green);
+      }
+
+      .down {
+        background: var(--red);
+      }
+
+      .unknown {
+        background: var(--amber);
+      }
+
+      .name {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .meta {
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 14px;
+        word-break: break-all;
+      }
+
+      .metrics {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        font-size: 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        color: var(--text-soft);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 4px 9px;
+      }
+
+      .right {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        gap: 9px;
+      }
+
+      .uptime {
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      .status-tag {
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+
+      .status-tag.up {
+        color: #63ecaa;
+        background: rgba(39, 208, 125, 0.12);
+        border-color: rgba(39, 208, 125, 0.3);
+      }
+
+      .status-tag.down {
+        color: #ff9cab;
+        background: rgba(255, 93, 112, 0.12);
+        border-color: rgba(255, 93, 112, 0.3);
+      }
+
+      .status-tag.unknown {
+        color: #ffd28f;
+        background: rgba(255, 180, 87, 0.12);
+        border-color: rgba(255, 180, 87, 0.3);
+      }
+
+      .empty {
+        color: var(--muted);
+        text-align: center;
+        padding: 34px 24px;
+        border: 1px dashed var(--border);
+        border-radius: var(--radius-lg);
+        background: rgba(12, 18, 32, 0.5);
+      }
+
+      .empty strong {
+        color: var(--text-soft);
+      }
+
+      .footer-note {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: right;
+      }
+
+      @media (max-width: 860px) {
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        form {
+          grid-template-columns: 1fr;
+        }
+
+        .card {
+          grid-template-columns: 1fr;
+        }
+
+        .right {
+          text-align: left;
+          align-items: start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="hero">
+        <div>
+          <h1>Is It Down?</h1>
+          <p class="subtitle">Production-ready uptime overview for your services</p>
+        </div>
+        <div class="chip" id="last-updated">Refreshing...</div>
+      </header>
+
+      <section class="panel">
+        <form id="monitor-form">
+          <input id="name" type="text" placeholder="Name (optional)" />
+          <input id="url" type="url" placeholder="https://example.com" required />
+          <button type="submit">Add Monitor</button>
+        </form>
+        <div class="status" id="status-message"></div>
+      </section>
+
+      <section class="stats" id="stats">
+        <article class="stat">
+          <div class="stat-label">Total Monitors</div>
+          <div class="stat-value" id="stat-total">0</div>
+        </article>
+        <article class="stat">
+          <div class="stat-label">Currently Up</div>
+          <div class="stat-value" id="stat-up">0</div>
+        </article>
+        <article class="stat">
+          <div class="stat-label">Avg 24h Uptime</div>
+          <div class="stat-value" id="stat-uptime">N/A</div>
+        </article>
+      </section>
+
+      <section class="grid" id="monitor-list"></section>
+      <div class="footer-note">Auto-refresh every 10 seconds</div>
+    </div>
+
+    <script>
+      const monitorList = document.getElementById("monitor-list");
+      const statusMessage = document.getElementById("status-message");
+      const lastUpdatedEl = document.getElementById("last-updated");
+      const statTotal = document.getElementById("stat-total");
+      const statUp = document.getElementById("stat-up");
+      const statUptime = document.getElementById("stat-uptime");
+      const form = document.getElementById("monitor-form");
+      const nameInput = document.getElementById("name");
+      const urlInput = document.getElementById("url");
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function setStatus(message, isError = false) {
+        statusMessage.textContent = message;
+        statusMessage.style.color = isError ? "#ff9aab" : "var(--muted)";
+      }
+
+      function formatUptime(value) {
+        if (value === null || value === undefined) {
+          return "N/A";
+        }
+        return `${value.toFixed(2)}%`;
+      }
+
+      function formatCheckedAt(isoDate) {
+        if (!isoDate) {
+          return "No checks yet";
+        }
+        const date = new Date(isoDate);
+        return `Checked ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+      }
+
+      function updateStats(monitors) {
+        statTotal.textContent = String(monitors.length);
+        const currentlyUp = monitors.filter((m) => m.latestStatus?.status === "up").length;
+        statUp.textContent = String(currentlyUp);
+
+        const withUptime = monitors
+          .map((m) => m.uptime24hPct)
+          .filter((v) => Number.isFinite(v));
+
+        if (withUptime.length === 0) {
+          statUptime.textContent = "N/A";
+          return;
+        }
+
+        const avg = withUptime.reduce((sum, value) => sum + value, 0) / withUptime.length;
+        statUptime.textContent = `${avg.toFixed(2)}%`;
+      }
+
+      function renderMonitors(monitors) {
+        updateStats(monitors);
+
+        if (!monitors.length) {
+          monitorList.innerHTML =
+            '<div class="empty"><strong>No monitors yet</strong><br />Add your first URL to start tracking uptime.</div>';
+          return;
+        }
+
+        monitorList.innerHTML = monitors
+          .map((monitor) => {
+            const latest = monitor.latestStatus || {};
+            const isUp = latest.status === "up";
+            const hasStatus = Boolean(latest.status);
+            const dotClass = hasStatus ? (isUp ? "up" : "down") : "unknown";
+            const tagClass = dotClass;
+            const tagLabel = hasStatus ? (isUp ? "ONLINE" : "OFFLINE") : "PENDING";
+            const response = latest.responseTimeMs ?? "N/A";
+            const code = latest.statusCode ?? "-";
+
+            return `
+              <article class="card">
+                <div class="name-wrap">
+                  <div class="name-line">
+                    <span class="dot ${dotClass}"></span>
+                    <span class="name">${escapeHtml(monitor.name)}</span>
+                  </div>
+                  <div class="meta">${escapeHtml(monitor.url)}</div>
+                  <div class="metrics">
+                    <span class="pill">HTTP: ${code}</span>
+                    <span class="pill">Response: ${response} ms</span>
+                    <span class="pill">${formatCheckedAt(latest.checkedAt)}</span>
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="status-tag ${tagClass}">${tagLabel}</div>
+                  <div class="uptime">24h Uptime: ${formatUptime(monitor.uptime24hPct)}</div>
+                  <button class="danger" onclick="removeMonitor(${monitor.id})">Delete</button>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      async function loadMonitors() {
+        try {
+          const response = await fetch("/api/monitors");
+          if (!response.ok) {
+            throw new Error("Failed to load monitors");
+          }
+          const monitors = await response.json();
+          renderMonitors(monitors);
+          lastUpdatedEl.textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      }
+
+      async function removeMonitor(id) {
+        try {
+          const response = await fetch(`/api/monitors/${id}`, { method: "DELETE" });
+          if (!response.ok) {
+            throw new Error("Delete failed");
+          }
+          setStatus("Monitor removed");
+          loadMonitors();
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const payload = {
+          name: nameInput.value.trim(),
+          url: urlInput.value.trim(),
+        };
+
+        try {
+          const response = await fetch("/api/monitors", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error || "Failed to add monitor");
+          }
+
+          form.reset();
+          setStatus("Monitor added");
+          loadMonitors();
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      });
+
+      loadMonitors();
+      setInterval(loadMonitors, 10000);
+    </script>
+  </body>
+</html>
